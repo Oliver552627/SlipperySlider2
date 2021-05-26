@@ -1,0 +1,64 @@
+//This code is for player movement.
+/*It first checks whether there is a Rigidbody2D attached to the gameObject that this script is attachted to, and if there isn't, 
+it will attach one and assign some of the Rigidbody2D values (including Rigidbody2D itself) different names to simplify things. 
+If there is a RigidBody2D attached, it will assign the Rigidbody2D a new name to simplify things. This is all in the Start
+function, meaning it will run before the first frame is loaded.*/
+
+/*The first thing that is happening every frame is it is collecting the input from the player pressing keys, and these keys 
+ have been assigned axis by Unity. Up arrow, Down arrow, W and S are on the y axis, with Up arrow and W on the positive, 
+and Down arrow and S on the negative axis. Left arrow, Right arrow, A and D are on the y axis, with Left arrow and A on the 
+negative and Right arrow and D on the positive. any key pressed on the negative side of the axis will return -1 as a value,
+and any key pressed on the positive side of the axis will return 1 as a value. I have assigned these values to the floats x and
+y. It then multiplies the value given by 3 to give us the player speed and direction. This is how the player moves. Using
+the Time.deltaTime gives the penguin the sliding effect. */
+
+
+
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerMovement : MonoBehaviour
+{
+    private Rigidbody2D rb; //This is assigning the Rigidbody2D a simpler name.
+    private Vector2 velocity; //This is assigning the Vector2 a simpler name.
+    public float playerSpeed; /*This is creating a float variable that is changeable from within the Unity Editor, because it
+                                a public class.*/
+
+    private void Start() //this is called before the first frame
+    {
+        
+
+        if (GetComponent<Rigidbody2D>() == null)
+        {
+            gameObject.AddComponent<Rigidbody2D>();
+            rb = GetComponent<Rigidbody2D>();
+            rb.gravityScale = 0;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+        else
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+    }
+
+    private void Update() //This is called every frame
+    {
+        float x = Input.GetAxis("Horizontal"); //This gives me a value betweeen -1 and 1, depending on which key is pressed
+        float y = Input.GetAxis("Vertical"); //This gives me a value betweeen -1 and 1, depending on which key is pressed
+
+        velocity = new Vector2(x * playerSpeed, y * playerSpeed); /*This creates a new Vector2 called velocity that
+                                                                    determines the player's speed and direction*/
+
+        
+
+        rb.velocity += (velocity * 3) * Time.deltaTime; /*This adds (velocity * 3) * the interval in seconds between the 
+                                                          last frame and the current one to the speed of the player. This makes
+                                                          the character seem like it is slipping.*/
+
+        
+    }
+}
