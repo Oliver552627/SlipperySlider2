@@ -1,0 +1,44 @@
+/*This script is to show the player how long they have been alive for. It is editing a text component in the game , and changing it to display the score, which is the time
+the player has been alive for.*/
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Timer : MonoBehaviour
+{
+    public float timePlayed = 0f; //creates the variable for the timer and sets the timer to 0
+
+    public Text timerText;    //Allows me to add the text component so it can be edited by the script
+    // Start is called before the first frame update
+    void Start()
+    {
+        timePlayed = 0f; //Sets the timer to 0
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (timePlayed < 1f)
+    {
+        timePlayed += Time.deltaTime;
+        }
+        else
+        {
+            if (timePlayed > 1f)
+            {
+                timePlayed += Time.deltaTime;
+            }
+        } //This ensures that the timer will always be uppdating the time played
+
+        int finalTime = Mathf.RoundToInt(timePlayed); //Rounds the timer into seconds becaue it is rounding to an integer (whole number)
+
+        timerText.text = "Score: " + finalTime.ToString(); //This sets the timer text to "Score:" and then however many seconds you have survived for. 
+    }
+
+}
+
+}
