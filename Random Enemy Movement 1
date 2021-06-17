@@ -1,0 +1,91 @@
+/*This script randomises the movement for the enemy so that it travles in directions that they player cannot predict. 
+This is the first version and it has quite a few bugs and doesn't work that well*/
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class enemyMovement : MonoBehaviour
+{
+    private int direction1; //Creating a variable for a random direction
+    private int direction2; //Creating a variable for a random direction
+    private Rigidbody2D rb; //Assigns Rigidbody as simpler name
+    private Vector2 velocity; //Assigns Vector2 a simpler name
+    public float enemySpeed = 8f; //Creates a variable for the enemy's speed
+    private float time; //Creates a variable so I can assign it values from a different script
+    private float randomTime; //Creates a variable so I can assign it a random time
+    private float changeDirectionTime; //Creates a variable for me to change it's value at a randomised time
+
+    
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        //checks if the enemy has a Rigidbody component, and if not, assign it a Rigidbody and set the values to what I require. If it does, it loads it in.
+         if (GetComponent<Rigidbody2D>() == null)
+        {
+            gameObject.AddComponent<Rigidbody2D>();
+            rb = GetComponent<Rigidbody2D>();
+            rb.gravityScale = 0;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+        else
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+
+        time = GameObject.Find("timer").GetComponent<Timer>().timePlayed; //Collects the time variable from the timer script
+        float randomTime = Mathf.RoundToInt(Random.Range(2, 5)); // Sets randomTime to a whole number between 2 and 5 (inclusive of 5 but exclusive of 2)
+        float changeDirectionTime = Mathf.RoundToInt(randomTime -= Time.deltaTime);// Sets changeDirectionTime to count down in whole numbers from the value assigned by randomTime
+    }
+
+    
+
+    // Update is called once per frame
+    void Update()
+    {
+      
+        
+        
+        int randomTime = Random.Range(2, 5);  // Sets randomTime to a whole number between 2 and 5 (inclusive of 5 but exclusive of 2)
+
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation; // Makes sure that the enemy's Rigidbody doesn't rotate, because I had problems with this earlier
+
+
+        int direction1 = Mathf.RoundToInt(Random.Range(0, 2)); //Sets direction1 to a whole value between 0 and 2 (incluse of 2 but exclusive of 0)
+        int direction2 = Mathf.RoundToInt(Random.Range(0, 2)); //Sets direction2 to a whole value between 0 and 2 (incluse of 2 but exclusive of 0)
+        
+        int xDirection = Mathf.RoundToInt(direction1); //Sets xDirection to the random value assigned to direction1
+        int yDirection = Mathf.RoundToInt(direction2); //Sets yDirection to the random value assigned to direction2
+        
+        
+        if (direction1 == 1) {
+            xDirection = -1;
+        }else{
+            xDirection = 1;
+        } //This is checking if direction1 is equal to 1, then it is setting it to -1, and if it is not (equal to 1) then it sets it to 1
+
+        if (direction2 == -1) {
+            yDirection = 1;
+        }else{
+            yDirection = -1;
+        } //This is checking if direction2 is equal to -1, then it is setting it to 1, and if it is not (equal to -1) then it sets it to -1
+        
+        
+
+
+        if (changeDirectionTime == 0) {
+        
+        changeDirectionTime += randomTime;
+
+        }else{
+
+        velocity = new Vector2 (xDirection / enemySpeed, yDirection / enemySpeed);
+        rb.velocity += velocity / (enemySpeed / 16);
+        } /*This is checking whether the changeDirectionTime is equal to 0, and if it is, it is setting it a random number assigned by randomTime.
+        Otherwise, it is setting the velocity to the random directions assigned by direction1 and direction2 earlier in the script divided by the enemy speed.
+        It is then setting the Rigidbody's velocity to itself plus velocity divided by the enemyspeed divided by 16. I have no idea how this math works, it just does.*/
+       
+    }
+}
