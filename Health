@@ -1,0 +1,49 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class health : MonoBehaviour
+{
+
+    public Text healthText;
+    public float Health;
+    public float remainingHealth;
+    public float lostHealth;
+
+    private float distanceBetween;
+
+    
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        //Creates a variable and assigns it to the data found in the enemy movement script
+        Health = GameObject.Find("enemy").GetComponent<isTriggerMovement>().Lives;
+
+        
+     
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //Updates the Health variable that is collected from the enemy every frame
+        Health = GameObject.Find("enemy").GetComponent<isTriggerMovement>().Lives;
+
+        //Sets the remaining health to the data according to the enemy movement script
+        float remainingHealth = Health;
+
+        //Changes the text of the health text to however much health is left
+        healthText.text = ("Health: " + remainingHealth.ToString() + "/5");
+        
+        //This is checking whether the player has less than one health, and if they do, it loads the game over scene
+        if(Health < 1)
+        {
+            SceneManager.LoadScene("game over");
+        }
+    }
+
+}
