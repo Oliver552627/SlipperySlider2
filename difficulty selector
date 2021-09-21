@@ -1,0 +1,37 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class difficultyChanger : MonoBehaviour
+{
+    public InputField answer;
+    public string[] acceptedNumbers;
+
+    
+    public int difficulty;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+      
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        for(int i = 0; i < acceptedNumbers.Length; i++)
+        {
+            if (Input.GetKeyDown(KeyCode.Return) && answer.text == acceptedNumbers[i])
+            {
+                difficulty = int.Parse(answer.text);
+            } 
+
+        }
+        
+       
+        
+        
+    }
+}
