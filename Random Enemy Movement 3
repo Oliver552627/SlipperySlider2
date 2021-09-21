@@ -1,0 +1,172 @@
+//This code randomises the movement of the enemy. It also controls the health and damage systems
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class isTriggerMovement : MonoBehaviour
+{
+
+    public float bearX;
+    public float bearY;
+
+
+    private Rigidbody2D rb; //Gives the Rigidbody a simpler name
+    private Vector2 velocity; //Gives a Vetor2 a simpler name for whenever I create one
+
+   
+    private float xDirection;
+    private float yDirection;
+    private float speed;
+    public float maxSpeed;
+
+    private bool collided;
+
+    private float random1;
+    private float random2;
+
+    
+
+   
+   
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+        maxSpeed = 4f;
+
+        
+        
+
+        /*Check whether I have a Rigidbody attached to the obect. If I don't, attach one and set the constraints and gravity scale to what I need.
+         * If I do, then make sure the Rigidbody is ready to go whenever I call it.*/
+        if (GetComponent<Rigidbody2D>() == null)
+        {
+            gameObject.AddComponent<Rigidbody2D>();
+            rb = GetComponent<Rigidbody2D>();
+            rb.gravityScale = 0;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+        else
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+
+        xDirection = Random.Range(-2, 1); //Creates a random number between -1 and 1, up to quite a few of decimal places
+        yDirection = Random.Range(-2, 1); //Creates a random number between -1 and 1, up to quite a few of decimal places
+        speed = 3; //sets speed to 3
+        
+
+        velocity = new Vector2(xDirection * speed, yDirection * speed); //sets velocity to a new Vector2 that is the xDirection * by speed and yDirection * speed
+        rb.velocity = velocity; //sets the velocity of the Rigidbody to the velocity I have just made in the line above
+
+       
+
+    }
+
+    
+    // Update is called once per frame
+    void Update()
+    {
+        
+        bearX = transform.position.x; //collects the x position in the frame and assigns it to the variable x
+        bearY = transform.position.y; //collects the y position in the frame and assigns it to the variable y
+
+        random1 = Random.Range(-2, 2); //creates a random number between 0 and 1
+        random2 = Random.Range(-3, 1); //creates a random number between -1 and 0
+
+        //This is to make sure that the enemy moves because sometimes the code will choose 0 and 0 for the random movement ranges and this is not good.
+        if(random1 == 0)
+        {
+            random1 += 0.3f;
+        }
+
+        if(random2 == 0)
+        {
+            random2 -= 0.3f;
+        }
+
+
+      
+
+       
+        
+       
+    }
+
+
+    //This activates when the enemy comes into contact with the border
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        //Sets the boolean collided to true so that I can activate code depending on whether this is true
+        collided = true; 
+
+        //All of this checks what the x and y values are and makes sure that the mechanics don't bounce it back into the boundary, creating a loop.
+
+        if(collided == true)
+        {
+            
+            //This makes sure that the bear does not run into the wall when it chooses a new direction
+            if (bearX < 0)
+            {
+                xDirection += random1;
+            }
+
+            if (bearY < 0)
+            {
+                yDirection += (random1 + random2);
+            }
+
+            if (bearX > 0)
+            {
+                xDirection -= random2;
+            }
+
+            if (bearY > 0)
+            {
+                yDirection -= (random2 - random1);
+            }
+            
+            //Sets the boolean collided to fals
+            collided = false;
+        }
+
+        if(collided == false)
+        {
+            random1 = Random.Range(-2, 2); //creates a random number between -1 and 1
+            random2 = Random.Range(-3, 1); //creates a random number between -2 and 0
+
+            if(random1 == random2)
+            {
+                random1 = Random.Range(-2, 2); //creates a random number between -1 and 1
+                random2 = Random.Range(-3, 1); //creates a random number between -2 and 0
+            }
+        }
+
+
+
+        velocity = new Vector2(Mathf.Clamp(xDirection * speed, -maxSpeed, maxSpeed), Mathf.Clamp(yDirection * speed, -maxSpeed, maxSpeed));
+        rb.velocity = velocity;//sets the velocity of the Rigidbody to the velocity I have just made in the line above and makes sure it doesn't go too fast
+
+    }
+    //Activates when the player pauses the game
+    public void PauserBear()
+    {
+
+        speed = 0;
+
+    }
+    //Activates when the player resumes the game
+    public void UnPauserBear()
+    {
+        speed = 3; 
+
+        //Makes sure the enemy's direction is the same as before the game was paused
+        rb.velocity = velocity;
+    }
+
+    
+}
+
