@@ -1,0 +1,41 @@
+ difficulty = GameObject.Find("difficultyCarrier").GetComponent<difficultyCarrierScript>().selectedDifficulty;
+
+        if (difficulty == 1)
+        {
+            playWithOne();
+            
+        }
+
+        if (difficulty == 2)
+        {
+            playWithTwo();
+           
+        }
+
+        if (difficulty == 3)
+        {
+            playWithThree();
+            
+        }
+    }
+
+    public void playWithOne()
+    {
+        bear1.SetActive(true);
+        bear2.SetActive(false);
+        bear3.SetActive(false);
+    }
+
+    public void playWithTwo()
+    {
+        bear1.SetActive(true);
+        bear2.SetActive(true);
+        bear3.SetActive(false);
+    }
+
+    public void playWithThree()
+    {
+        bear1.SetActive(true);
+        bear2.SetActive(true);
+        bear3.SetActive(true);
+    }
