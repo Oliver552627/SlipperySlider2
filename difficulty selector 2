@@ -1,0 +1,63 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class difficultyChanger : MonoBehaviour
+{
+    public InputField answer;
+    public string[] acceptedNumbers;
+
+    public GameObject playButton;
+
+    public int difficulty;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+        playButton = GameObject.FindGameObjectWithTag("playButton");
+        playButton.SetActive(false);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void checkAnswer()
+    {
+
+        
+
+        for (int i = 0; i < acceptedNumbers.Length; i++)
+        {
+            if (Input.GetKeyDown(KeyCode.Return) && answer.text == acceptedNumbers[i])
+            {
+                setPlayable();
+            }
+           
+        }
+
+        difficulty = int.Parse(answer.text);
+
+        if (Input.GetKeyDown(KeyCode.Return) && difficulty > 3 || Input.GetKeyDown(KeyCode.Return) && difficulty < 1)
+        {
+            dontSetPlayable();
+        }
+    }
+
+    public void setPlayable()
+    {
+        playButton.SetActive(true);
+         
+    }
+
+    public void dontSetPlayable()
+    {
+        playButton.SetActive(false);
+        
+    }
+}
